@@ -1,5 +1,9 @@
 # asg-node-refresh
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/xandout/asg-node-refresh)](https://goreportcard.com/badge/github.com/xandout/asg-node-refresh)
+[![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/xandout/asg-node-refresh/master/LICENSE)
+
+
 An AWS Auto Scaling Group refresh tool.
 
 ## Why?
