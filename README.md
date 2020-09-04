@@ -71,7 +71,7 @@ Create an IAM user with the following permissions.  Below are two examples of th
 ## Update YAML
 
 
-### Set AWS credentials in [aws_creds_secret.yml](_manifests/aws_creds_secret.yml)
+### Set AWS credentials in [aws_creds_secret.yml](_manifests/aws_creds_secret.yml.example)
 
 You will need to base64 encode the values of `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and the name(not ARN) of your target ASG.
 
