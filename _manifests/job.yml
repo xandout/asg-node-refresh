@@ -42,7 +42,7 @@ spec:
       containers:
       - name: asg-node-refresh
         imagePullPolicy: Always
-        image: xandout/asg-node-refresh
+        image: xandout/asg-node-refresh:v0.0.1
         env:
         - name: AWS_REGION
           value: "us-east-1"
