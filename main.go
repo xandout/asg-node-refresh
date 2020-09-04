@@ -99,7 +99,7 @@ func main() {
 		log.Println("Creating refresh request with AWS...")
 		refreshOutput, err := startRefresh(instanceWarmup, 90)
 		if err != nil {
-			log.Fatalf("Error occured while requesting an instance refresh: %v", err)
+			log.Fatalf("Error occurred while requesting an instance refresh: %v", err)
 		}
 
 		cm.Data = map[string]string{}
