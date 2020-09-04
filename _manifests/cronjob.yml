@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "asg-node-refresh-sa"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: asg-node-refresh-sa-role
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["asg-node-refresh"]
+  verbs: ["get", "update"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: asg-node-refresh-sa-role-binding
+subjects:
+- kind: ServiceAccount
+  name: "asg-node-refresh-sa"
+roleRef:
+  kind: Role
+  name: asg-node-refresh-sa-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: asg-node-refresh
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: asg-node-refresh
+spec:
+  schedule: "0 4 * * *"
+  jobTemplate:
+    metadata:
+      labels:
+        k8s-app: asg-node-refresh
+    spec:
+      template:
+        spec:
+          serviceAccount: "asg-node-refresh-sa"
+          containers:
+          - name: asg-node-refresh
+            imagePullPolicy: Always
+            image: xandout/asg-node-refresh
+            env:
+            - name: AWS_REGION
+              value: "us-east-1"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: asg-node-refresh-aws-creds
+                  key: aws_access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: asg-node-refresh-aws-creds
+                  key: aws_secret_access_key
+            - name: AWS_ASG_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: asg-node-refresh-aws-creds
+                  key: aws_asg_name
+            - name: JOB
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['job-name']
+            - name: INSTANCE_WARMUP
+              value: "300"
+            - name: CONFIGMAP_NAME
+              value: asg-node-refresh
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          restartPolicy: OnFailure

@@ -1,0 +1,9 @@
+_manifests/
+.github/
+*.md
+build_push.sh
+deploy_local.sh
+Dockerfile
+tag_version.sh
+VERSION
+_private_manifests/
